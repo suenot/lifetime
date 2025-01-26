@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Box, 
   Grid, 
@@ -8,7 +8,10 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
-  Stack
+  Stack,
+  Paper,
+  LinearProgress,
+  Tooltip
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -64,16 +67,46 @@ const SeasonDivider: React.FC<{ label: string }> = ({ label }) => (
   </Box>
 );
 
+const StatItem: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
+  <Box sx={{ textAlign: 'center', p: 1 }}>
+    <Typography variant="body2" color="text.secondary">
+      {label}
+    </Typography>
+    <Typography variant="h6">
+      {value}
+    </Typography>
+  </Box>
+);
+
 const LifeCalendar: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [birthDate, setBirthDate] = useState<Dayjs | null>(dayjs('1989-01-07'));
+  const [deathDate, setDeathDate] = useState<Dayjs | null>(null);
   const { language, setLanguage } = useLanguage();
   const t = translations[language as keyof typeof translations];
-  const lifeExpectancy = 100;
   const weeksInYear = 52;
 
   const currentDate = dayjs();
+  
+  const stats = useMemo(() => {
+    if (!birthDate) return null;
+    
+    const endDate = deathDate || currentDate;
+    const totalYears = endDate.diff(birthDate, 'year', true);
+    const yearsLeft = deathDate ? Math.max(0, deathDate.diff(currentDate, 'year', true)) : 0;
+    const weeksLived = endDate.diff(birthDate, 'week');
+    const weeksLeft = deathDate ? Math.max(0, deathDate.diff(currentDate, 'week')) : 0;
+    const progress = deathDate ? (currentDate.diff(birthDate, 'week') / deathDate.diff(birthDate, 'week')) * 100 : 0;
+    
+    return {
+      yearsLived: totalYears.toFixed(1),
+      yearsLeft: yearsLeft.toFixed(1),
+      weeksLived,
+      weeksLeft,
+      progress: Math.min(100, Math.max(0, progress)).toFixed(1)
+    };
+  }, [birthDate, deathDate, currentDate]);
   
   const getWeeksLived = (year: number, weekIndex: number) => {
     if (!birthDate) return false;
@@ -155,6 +188,48 @@ const LifeCalendar: React.FC = () => {
     </Typography>
   );
 
+  const renderStats = () => {
+    if (!stats) return null;
+
+    return (
+      <Paper elevation={0} variant="outlined" sx={{ p: 2, mb: 3 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={4}>
+            <StatItem label={t.stats.yearsLived} value={stats.yearsLived} />
+          </Grid>
+          {deathDate && (
+            <Grid item xs={12} sm={6} md={4}>
+              <StatItem label={t.stats.yearsLeft} value={stats.yearsLeft} />
+            </Grid>
+          )}
+          {deathDate && (
+            <Grid item xs={12} md={4}>
+              <Box sx={{ p: 1 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  {t.stats.progressPercent}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box sx={{ width: '100%', mr: 1 }}>
+                    <LinearProgress 
+                      variant="determinate" 
+                      value={Number(stats.progress)} 
+                      sx={{ height: 10, borderRadius: 5 }}
+                    />
+                  </Box>
+                  <Box sx={{ minWidth: 35 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      {stats.progress}%
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Grid>
+          )}
+        </Grid>
+      </Paper>
+    );
+  };
+
   return (
     <Box sx={{ p: 2, maxWidth: '100%', overflow: 'auto' }}>
       <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
@@ -171,6 +246,18 @@ const LifeCalendar: React.FC = () => {
               }
             }}
           />
+          <DatePicker
+            label={t.deathDate}
+            value={deathDate}
+            onChange={(newValue) => setDeathDate(newValue)}
+            format="DD.MM.YYYY"
+            slotProps={{
+              textField: {
+                size: 'small',
+                sx: { width: 150 }
+              }
+            }}
+          />
         </LocalizationProvider>
         <LanguageSelector 
           language={language} 
@@ -178,6 +265,7 @@ const LifeCalendar: React.FC = () => {
         />
       </Stack>
 
+      {renderStats()}
       {renderSeasons()}
 
       <Box
@@ -189,7 +277,7 @@ const LifeCalendar: React.FC = () => {
           overflow: 'auto',
         }}
       >
-        {birthDate && Array.from({ length: lifeExpectancy }, (_, yearIndex) => {
+        {birthDate && Array.from({ length: deathDate ? deathDate.diff(birthDate, 'year') + 1 : 100 }, (_, yearIndex) => {
           const year = birthDate.year() + yearIndex;
           return (
             <Box
