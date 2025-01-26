@@ -19,6 +19,7 @@ import 'dayjs/locale/ru';
 import 'dayjs/locale/en';
 import { translations } from '../../i18n/translations';
 import LanguageSelector from '../LanguageSelector/LanguageSelector';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 // Initialize weekOfYear plugin
 dayjs.extend(weekOfYear);
@@ -67,7 +68,7 @@ const LifeCalendar: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [birthDate, setBirthDate] = useState<Dayjs | null>(dayjs('1989-01-07'));
-  const [language, setLanguage] = useState<string>('ru');
+  const { language, setLanguage } = useLanguage();
   const t = translations[language as keyof typeof translations];
   const lifeExpectancy = 100;
   const weeksInYear = 52;

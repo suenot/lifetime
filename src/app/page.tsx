@@ -3,11 +3,11 @@
 import { Box, Container, Typography } from '@mui/material';
 import LifeCalendar from '../components/LifeCalendar/LifeCalendar';
 import { translations } from '../i18n/translations';
-import { useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import styles from "./page.module.css";
 
 export default function Home() {
-  const [language, setLanguage] = useState<string>('ru');
+  const { language } = useLanguage();
   const t = translations[language as keyof typeof translations];
 
   return (
