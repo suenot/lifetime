@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lifetime
+- редактирвоание списка событий и диапазонов событий (событие - первая любовь, диапазон - школа)
+- крупные иконки, чтобы в них был виден аватар события
+- если несколько событий, то отображать как apple folder (до 4 аватарок событий внутри)
+- Количество коммитов каждый год: источники - github, gitlab, bitbucket
+- Количество репозиториев каждый год: источник - github
+- Количество сотрудников каждый год: источник - github
+- Количество и список проектов каждый год: источник - github
+- Список известных личностей и их периоды жизни и важные события на lifetime (переключением между календарями по клику на имя и фамилию известной личности)
+- добавление авторизации
+- персональные страницы (свой адрес с ником) - ник надо покупать (иначе hash)
+- на странице должен быть аватар пользователя и ссылки на его сайт, контакты
 
-## Getting Started
+- добавить сервис для связывания профилей в семейное дерево и дерево друзей
+- поиск друзей по телефону, email и нику по базе контактов(платная функция)
 
-First, run the development server:
+- добавление своих генетических данных, чтобы автоматически искать родственников (платная функция) + партнерство с компаниями
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- памятник на svg/css в подвале сайта, где можно написать, что бы ты хотел видеть на своем памятнике или что стоит написать на нем (платная функция)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- экспорт и импорт данных в json
+- экспорт и импорт данных в pdf
+- экспорт и импорт данных в xlsx
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
