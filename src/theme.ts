@@ -2,6 +2,27 @@
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    h3: {
+      fontWeight: 500,
+      fontSize: '2rem',
+      '@media (min-width:600px)': {
+        fontSize: '3rem',
+      },
+    },
+  },
   palette: {
     mode: 'light',
     primary: {
@@ -15,20 +36,26 @@ const theme = createTheme({
       dark: '#c51162',
     },
     background: {
-      default: '#f5f5f5',
+      default: '#fafafa',
       paper: '#ffffff',
     },
   },
-  typography: {
-    h3: {
-      fontWeight: 500,
-      fontSize: '2rem',
-      '@media (min-width:600px)': {
-        fontSize: '3rem',
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          borderRadius: 8,
+        },
       },
     },
-  },
-  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+        },
+      },
+    },
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',

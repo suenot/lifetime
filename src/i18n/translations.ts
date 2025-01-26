@@ -7,6 +7,11 @@ export const translations = {
     deathDate: 'Death Date',
     age: 'Age',
     year: 'Year',
+    errors: {
+      birthDateRequired: 'Birth date is required',
+      birthDateFuture: 'Birth date cannot be in the future',
+      deathDateBeforeBirth: 'Death date cannot be before birth date'
+    },
     stats: {
       yearsLived: 'Years lived',
       yearsLeft: 'Years left',
@@ -29,6 +34,11 @@ export const translations = {
     deathDate: 'Дата смерти',
     age: 'Возраст',
     year: 'Год',
+    errors: {
+      birthDateRequired: 'Дата рождения обязательна',
+      birthDateFuture: 'Дата рождения не может быть в будущем',
+      deathDateBeforeBirth: 'Дата смерти не может быть раньше даты рождения'
+    },
     stats: {
       yearsLived: 'Прожито лет',
       yearsLeft: 'Осталось лет',

@@ -86,11 +86,52 @@ const LifeCalendar: React.FC = () => {
   const { language, setLanguage } = useLanguage();
   const t = translations[language as keyof typeof translations];
   const weeksInYear = 52;
-
   const currentDate = dayjs();
+
+  const [birthDateError, setBirthDateError] = useState<string | null>(null);
+  const [deathDateError, setDeathDateError] = useState<string | null>(null);
+  
+  const validateDates = (birth: Dayjs | null, death: Dayjs | null) => {
+    if (!birth) {
+      setBirthDateError(t.errors.birthDateRequired);
+      return false;
+    }
+    
+    if (birth.isAfter(currentDate)) {
+      setBirthDateError(t.errors.birthDateFuture);
+      return false;
+    }
+    
+    setBirthDateError(null);
+    
+    if (death) {
+      if (death.isBefore(birth)) {
+        setDeathDateError(t.errors.deathDateBeforeBirth);
+        return false;
+      }
+      
+      if (death.diff(birth, 'year') > 150) {
+        setDeathDateError(t.errors.deathDateTooFar);
+        return false;
+      }
+    }
+    
+    setDeathDateError(null);
+    return true;
+  };
+
+  const handleBirthDateChange = (newValue: Dayjs | null) => {
+    setBirthDate(newValue);
+    validateDates(newValue, deathDate);
+  };
+
+  const handleDeathDateChange = (newValue: Dayjs | null) => {
+    setDeathDate(newValue);
+    validateDates(birthDate, newValue);
+  };
   
   const stats = useMemo(() => {
-    if (!birthDate) return null;
+    if (!birthDate || birthDateError || deathDateError) return null;
     
     const endDate = deathDate || currentDate;
     const totalYears = endDate.diff(birthDate, 'year', true);
@@ -106,10 +147,10 @@ const LifeCalendar: React.FC = () => {
       weeksLeft,
       progress: Math.min(100, Math.max(0, progress)).toFixed(1)
     };
-  }, [birthDate, deathDate, currentDate]);
+  }, [birthDate, deathDate, currentDate, birthDateError, deathDateError]);
   
   const getWeeksLived = (year: number, weekIndex: number) => {
-    if (!birthDate) return false;
+    if (!birthDate || birthDateError) return false;
     
     const weekStart = dayjs().year(year).week(weekIndex + 1).startOf('week');
     
@@ -237,24 +278,28 @@ const LifeCalendar: React.FC = () => {
           <DatePicker
             label={t.birthDate}
             value={birthDate}
-            onChange={(newValue) => setBirthDate(newValue)}
+            onChange={handleBirthDateChange}
             format="DD.MM.YYYY"
             slotProps={{
               textField: {
                 size: 'small',
-                sx: { width: 150 }
+                sx: { width: 150 },
+                error: !!birthDateError,
+                helperText: birthDateError
               }
             }}
           />
           <DatePicker
             label={t.deathDate}
             value={deathDate}
-            onChange={(newValue) => setDeathDate(newValue)}
+            onChange={handleDeathDateChange}
             format="DD.MM.YYYY"
             slotProps={{
               textField: {
                 size: 'small',
-                sx: { width: 150 }
+                sx: { width: 150 },
+                error: !!deathDateError,
+                helperText: deathDateError
               }
             }}
           />
@@ -277,7 +322,7 @@ const LifeCalendar: React.FC = () => {
           overflow: 'auto',
         }}
       >
-        {birthDate && Array.from({ length: deathDate ? deathDate.diff(birthDate, 'year') + 1 : 100 }, (_, yearIndex) => {
+        {birthDate && !birthDateError && Array.from({ length: deathDate && !deathDateError ? deathDate.diff(birthDate, 'year') + 1 : 100 }, (_, yearIndex) => {
           const year = birthDate.year() + yearIndex;
           return (
             <Box
