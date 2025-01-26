@@ -283,9 +283,18 @@ const LifeCalendar: React.FC = () => {
             slotProps={{
               textField: {
                 size: 'small',
-                sx: { width: 150 },
-                error: !!birthDateError,
-                helperText: birthDateError
+                sx: { 
+                  width: 150,
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: birthDateError ? 'error.main' : 'inherit',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: birthDateError ? 'error.main' : 'inherit',
+                    },
+                  },
+                },
+                error: !!birthDateError
               }
             }}
           />
@@ -297,9 +306,18 @@ const LifeCalendar: React.FC = () => {
             slotProps={{
               textField: {
                 size: 'small',
-                sx: { width: 150 },
-                error: !!deathDateError,
-                helperText: deathDateError
+                sx: { 
+                  width: 150,
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: deathDateError ? 'error.main' : 'inherit',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: deathDateError ? 'error.main' : 'inherit',
+                    },
+                  },
+                },
+                error: !!deathDateError
               }
             }}
           />

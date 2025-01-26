@@ -1,16 +1,17 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { useLanguageFromUrl, Language } from '../hooks/useLanguage';
 
 interface LanguageContextType {
-  language: string;
-  setLanguage: (lang: string) => void;
+  language: Language;
+  setLanguage: (lang: Language) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<string>('ru');
+  const { language, setLanguage } = useLanguageFromUrl();
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>

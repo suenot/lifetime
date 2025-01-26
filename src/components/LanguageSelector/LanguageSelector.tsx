@@ -1,15 +1,16 @@
 'use client';
 
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Language } from '../../hooks/useLanguage';
 
 interface LanguageSelectorProps {
-  language: string;
-  onLanguageChange: (lang: string) => void;
+  language: Language;
+  onLanguageChange: (language: Language) => void;
 }
 
-export default function LanguageSelector({ language, onLanguageChange }: LanguageSelectorProps) {
-  const handleChange = (event: React.MouseEvent<HTMLElement>, newLanguage: string | null) => {
-    if (newLanguage !== null) {
+const LanguageSelector: React.FC<LanguageSelectorProps> = ({ language, onLanguageChange }) => {
+  const handleChange = (_: React.MouseEvent<HTMLElement>, newLanguage: Language | null) => {
+    if (newLanguage) {
       onLanguageChange(newLanguage);
     }
   };
@@ -30,4 +31,6 @@ export default function LanguageSelector({ language, onLanguageChange }: Languag
       </ToggleButton>
     </ToggleButtonGroup>
   );
-}
+};
+
+export default LanguageSelector;
