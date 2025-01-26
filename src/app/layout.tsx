@@ -3,6 +3,7 @@ import "./globals.css";
 import ThemeRegistry from '../components/ThemeRegistry/ThemeRegistry';
 import DateProvider from '../components/Providers/DateProvider';
 import { LanguageProvider } from '../contexts/LanguageContext';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: "Lifetime - Visualize Your Life Journey",
@@ -24,11 +25,13 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeRegistry>
-          <LanguageProvider>
-            <DateProvider>
-              {children}
-            </DateProvider>
-          </LanguageProvider>
+          <Suspense>
+            <LanguageProvider>
+              <DateProvider>
+                {children}
+              </DateProvider>
+            </LanguageProvider>
+          </Suspense>
         </ThemeRegistry>
       </body>
     </html>

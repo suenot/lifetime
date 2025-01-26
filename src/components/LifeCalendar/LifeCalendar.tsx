@@ -109,11 +109,6 @@ const LifeCalendar: React.FC = () => {
         setDeathDateError(t.errors.deathDateBeforeBirth);
         return false;
       }
-      
-      if (death.diff(birth, 'year') > 150) {
-        setDeathDateError(t.errors.deathDateTooFar);
-        return false;
-      }
     }
     
     setDeathDateError(null);
