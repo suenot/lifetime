@@ -1,6 +1,7 @@
 export const translations = {
   en: {
-    title: 'Life Calendar',
+    title: 'Lifetime',
+    subtitle: 'Visualize Your Life Journey',
     description: 'Each cell represents one week of your life. Filled cells show weeks lived.',
     birthDate: 'Birth Date',
     age: 'Age',
@@ -13,7 +14,8 @@ export const translations = {
     }
   },
   ru: {
-    title: 'Календарь жизни',
+    title: 'Lifetime',
+    subtitle: 'Визуализация пути жизни',
     description: 'Каждая ячейка представляет одну неделю вашей жизни. Заполненные ячейки показывают прожитые недели.',
     birthDate: 'Дата рождения',
     age: 'Возраст',

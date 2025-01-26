@@ -14,10 +14,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
 import 'dayjs/locale/ru';
 import 'dayjs/locale/en';
 import { translations } from '../../i18n/translations';
 import LanguageSelector from '../LanguageSelector/LanguageSelector';
+
+// Initialize weekOfYear plugin
+dayjs.extend(weekOfYear);
 
 interface WeekProps {
   filled?: boolean;

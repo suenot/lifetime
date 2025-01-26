@@ -12,8 +12,11 @@ export default function Home() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h3" component="h1" gutterBottom sx={{ mb: 4 }}>
+      <Typography variant="h3" component="h1" gutterBottom sx={{ mb: 1 }}>
         {t.title}
+      </Typography>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 4, color: 'text.secondary' }}>
+        {t.subtitle}
       </Typography>
       <Typography variant="body1" sx={{ mb: 4 }}>
         {t.description}
