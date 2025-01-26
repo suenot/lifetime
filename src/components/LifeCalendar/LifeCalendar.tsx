@@ -11,7 +11,8 @@ import {
   Stack,
   Paper,
   LinearProgress,
-  Tooltip
+  Tooltip,
+  IconButton
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -23,6 +24,9 @@ import 'dayjs/locale/en';
 import { translations } from '../../i18n/translations';
 import LanguageSelector from '../LanguageSelector/LanguageSelector';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useEvents } from '../../contexts/EventsContext';
+import { WeekEvents } from '../WeekEvents/WeekEvents';
+import { ViewModule as ViewModuleIcon, ViewCompact as ViewCompactIcon, Menu as MenuIcon } from '@mui/icons-material';
 
 // Initialize weekOfYear plugin
 dayjs.extend(weekOfYear);
@@ -84,6 +88,7 @@ const LifeCalendar: React.FC = () => {
   const [birthDate, setBirthDate] = useState<Dayjs | null>(dayjs('1989-01-07'));
   const [deathDate, setDeathDate] = useState<Dayjs | null>(null);
   const { language, setLanguage } = useLanguage();
+  const { displayMode, toggleDisplayMode, toggleDrawer } = useEvents();
   const t = translations[language as keyof typeof translations];
   const weeksInYear = 52;
   const currentDate = dayjs();
@@ -266,6 +271,47 @@ const LifeCalendar: React.FC = () => {
     );
   };
 
+  const renderWeeks = () => {
+    if (!birthDate || birthDateError) return null;
+
+    const weeks = Array.from({ length: deathDate && !deathDateError ? deathDate.diff(birthDate, 'week') + 1 : 100 }, (_, index) => {
+      const weekStart = birthDate.clone().add(index, 'week');
+      return {
+        year: weekStart.year(),
+        weekNumber: weekStart.week(),
+      };
+    });
+
+    return (
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(52, 1fr)',
+          gap: 0.5,
+          '& > div': {
+            aspectRatio: '1/1',
+            borderRadius: 1,
+            border: '1px solid',
+            borderColor: 'divider',
+          },
+        }}
+      >
+        {weeks.map((week, index) => (
+          <Box
+            key={index}
+            sx={{
+              backgroundColor: getWeeksLived(week.year, week.weekNumber - 1) ? theme.palette.primary.light : 'transparent',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <WeekEvents weekId={`${week.year}-${week.weekNumber.toString().padStart(2, '0')}`} />
+          </Box>
+        ))}
+      </Box>
+    );
+  };
+
   return (
     <Box sx={{ p: 2, maxWidth: '100%', overflow: 'auto' }}>
       <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
@@ -316,11 +362,18 @@ const LifeCalendar: React.FC = () => {
               }
             }}
           />
+          <LanguageSelector 
+            language={language} 
+            onLanguageChange={setLanguage} 
+          />
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton onClick={toggleDisplayMode}>
+            {displayMode === 'compact' ? <ViewModuleIcon /> : <ViewCompactIcon />}
+          </IconButton>
+          <IconButton onClick={toggleDrawer}>
+            <MenuIcon />
+          </IconButton>
         </LocalizationProvider>
-        <LanguageSelector 
-          language={language} 
-          onLanguageChange={setLanguage} 
-        />
       </Stack>
 
       {renderStats()}
@@ -373,6 +426,7 @@ const LifeCalendar: React.FC = () => {
           );
         })}
       </Box>
+      {renderWeeks()}
     </Box>
   );
 };

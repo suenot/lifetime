@@ -1,9 +1,11 @@
 'use client';
 
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import LifeCalendar from '../components/LifeCalendar/LifeCalendar';
-import { translations } from '../i18n/translations';
 import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../i18n/translations';
+import { EventsProvider } from '../contexts/EventsContext';
+import { EventsDrawer } from '../components/EventsDrawer/EventsDrawer';
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -11,24 +13,17 @@ export default function Home() {
   const t = translations[language as keyof typeof translations];
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h3" component="h1" gutterBottom sx={{ mb: 1 }}>
-        {t.title}
-      </Typography>
-      <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 4, color: 'text.secondary' }}>
-        {t.subtitle}
-      </Typography>
-      <Typography variant="body1" sx={{ mb: 4 }}>
-        {t.description}
-      </Typography>
-      <Box sx={{ 
-        backgroundColor: 'background.paper',
-        borderRadius: 1,
-        boxShadow: 1,
-        overflow: 'hidden'
-      }}>
+    <EventsProvider>
+      <Box component="main" sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+        <Typography variant="h3" component="h1" sx={{ p: 2, textAlign: 'center' }}>
+          {t.title}
+        </Typography>
+        <Typography variant="subtitle1" sx={{ px: 2, pb: 2, textAlign: 'center', color: 'text.secondary' }}>
+          {t.description}
+        </Typography>
         <LifeCalendar />
+        <EventsDrawer />
       </Box>
-    </Container>
+    </EventsProvider>
   );
 }
