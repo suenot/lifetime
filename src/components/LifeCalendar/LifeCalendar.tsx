@@ -82,7 +82,7 @@ const LifeCalendar: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [birthDate, setBirthDate] = useState<Dayjs | null>(dayjs('1989-01-07'));
-  const [deathDate, setDeathDate] = useState<Dayjs | null>(null);
+  const [deathDate, setDeathDate] = useState<Dayjs | null>(dayjs('2069-01-01'));
   const { language, setLanguage } = useLanguage();
   const t = translations[language as keyof typeof translations];
   const weeksInYear = 52;
